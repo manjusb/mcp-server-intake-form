@@ -1,0 +1,30 @@
+# GitHub label configuration for MCP Server onboarding workflow
+# Use with github-label-sync or GitHub Actions
+
+- name: mcp-onboarding
+  description: "MCP server onboarding request"
+  color: "5319e7"
+
+- name: needs-review
+  description: "Awaiting MCP Server Team review"
+  color: "fbca04"
+
+- name: needs-changes
+  description: "Changes requested by MCP Server Team"
+  color: "fe7c7f"
+
+- name: changes-made
+  description: "Requestor has addressed requested changes"
+  color: "bfe5bf"
+
+- name: approved
+  description: "MCP server approved for onboarding"
+  color: "0e8a16"
+
+- name: rejected
+  description: "MCP server onboarding rejected"
+  color: "b60205"
+
+- name: onboarded
+  description: "MCP server successfully onboarded to gateway"
+  color: "1d76db"

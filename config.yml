@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: TrueFoundry MCP Gateway Docs
+    url: https://www.truefoundry.com/docs/ai-gateway/mcp/mcp-overview
+    about: Reference documentation for MCP Gateway features
+  - name: MCP Server Team
+    url: https://github.com/orgs/your-org/teams/mcp-server-team
+    about: Contact the MCP Server Team directly
