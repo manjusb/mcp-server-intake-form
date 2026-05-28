@@ -1,1433 +1,555 @@
-name: "MCP Server Onboarding Request"
-description: "Request onboarding of a new MCP server into the TrueFoundry AI/MCP Gateway"
-title: "[MCP Onboarding] <server-name>"
-labels: ["mcp-onboarding", "needs-review"]
+name: "MCP Service Request"
+description: "Request the AI Hub team to build, deploy, or operate an MCP server. LLM gateway access is a prerequisite - see the first question."
+title: "[MCP Request] <brief description of the request>"
+labels:
+  - "type:onboarding"
+  - "request:mcp-onboarding"
+  - "component:mcp-server"
+  - "gateway:truefoundry"
+  - "area:mcp-platform"
+  - "awaiting-governance-approval"
+  - "status:yet-to-start"
+  - "review:security"
+  - "review:architecture"
+  - "priority:p2-normal"
+assignees:
+  - Mackr
 body:
-  # ═══════════════════════════════════════════
-  # HEADER
-  # ═══════════════════════════════════════════
   - type: markdown
     attributes:
       value: |
-        ## TrueFoundry MCP Server Onboarding Request
+        # AI Hub - MCP Service Intake Form
 
-        Fill out all sections below. Fields marked with * are required.
-        Each placeholder shows an example — replace it with your own details.
+        This form captures everything the AI Hub team needs to build, deploy, and operate
+        an MCP server for you on **TrueFoundry**.
 
-        Reference: [TrueFoundry MCP Gateway docs](https://www.truefoundry.com/docs/ai-gateway/mcp/mcp-overview)
-        | [Auth & Security](https://www.truefoundry.com/docs/ai-gateway/mcp/mcp-gateway-auth-security)
-
-  # ═══════════════════════════════════════════
-  # SECTION 1 — REGISTRATION INFORMATION
-  # ═══════════════════════════════════════════
   - type: markdown
     attributes:
       value: |
-        ## 1. Registration Information
+        ##  Prerequisite Check (LLM access is required before MCP)
 
-        Who is requesting this MCP server onboarding.
-
-  - type: input
-    id: req_full_name
-    attributes:
-      label: "1.1 Full Name *"
-      description: Your full name as recognized by the organization
-      placeholder: "e.g., Jane Doe — The person the MCP Server Team will contact for clarifications. Use your full work name as it appears in the company directory."
-    validations:
-      required: true
-
-  - type: input
-    id: req_email
-    attributes:
-      label: "1.2 Email *"
-      description: Your corporate email address
-      placeholder: "e.g., jane.doe@company.com — All onboarding status updates and review outcomes will be sent here. Must be a valid corporate email."
-    validations:
-      required: true
-
-  - type: input
-    id: req_team
-    attributes:
-      label: "1.3 Team / Department *"
-      description: The team that owns or maintains this MCP server
-      placeholder: "e.g., Platform Engineering, ML Infrastructure, Data Science — Used to route support tickets, assign RBAC ownership, and determine the cost center for gateway usage."
-    validations:
-      required: true
-
-  - type: input
-    id: req_chat
-    attributes:
-      label: "1.4 Slack / Chat Handle *"
-      description: For fast follow-up during review and incident response
-      placeholder: "e.g., @jane.doe or #mcp-server-requests — The MCP Server Team may reach out here for clarifications. A channel (e.g., #mcp-eng) is preferred over a personal handle so the whole team sees updates."
-    validations:
-      required: true
-
-  - type: input
-    id: req_manager
-    attributes:
-      label: "1.5 Manager / Approver *"
-      description: The person authorizing this onboarding request
-      placeholder: "e.g., John Smith, VP of Engineering — May be contacted to confirm resource commitment, SLA acceptance, and compliance responsibility for the server's data."
-    validations:
-      required: true
-
-  - type: input
-    id: req_date
-    attributes:
-      label: "1.6 Date of Submission"
-      description: Auto-filled or manually entered
-      placeholder: "e.g., 2026-05-24 — The date this form is submitted. Used for tracking onboarding SLAs and scheduling review meetings."
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 2 — REQUEST DETAILS
-  # ═══════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ## 2. Request Details
-
-        Specify the nature and urgency of this onboarding request.
+        > **IMPORTANT:** LLM gateway access is a **MANDATORY prerequisite** for any MCP server.
+        >
+        > **Correct order:** LLM Intake Form -> LLM access approved -> This MCP form
+        >
+        > LLM Intake Form: **https://git.client.com/ai-hub/llm-intake**
+        >
+        > If your LLM access is not yet approved, please **STOP**, complete the LLM Intake Form
+        > first, wait for approval, then return to this MCP form.
 
   - type: dropdown
-    id: rd_request_type
+    id: llm_access_status
     attributes:
-      label: "2.1 Request Type *"
-      description: "New = first-time onboarding. Update = changing configuration of an existing server. Deprecate = removing a server from the gateway."
+      label: "Has your LLM gateway access already been approved? *"
+      description: "If not approved yet, do not continue with this form - complete the LLM Intake Form first."
       options:
-        - "New MCP Server"
-        - "Update Existing MCP Server"
-        - "Deprecate / Remove MCP Server"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: rd_priority
-    attributes:
-      label: "2.2 Priority *"
-      description: "Critical = blocking a production release. High = important but has a workaround. Normal = standard timeline. Low = nice-to-have."
-      options:
-        - "Critical — blocking production"
-        - "High — important, workaround exists"
-        - "Normal — standard timeline"
-        - "Low — exploratory / nice-to-have"
+        - "Yes - approved"
+        - "No - not yet requested"
+        - "No - request submitted but pending"
     validations:
       required: true
 
   - type: input
-    id: rd_target_date
+    id: llm_ticket_reference
     attributes:
-      label: "2.3 Target Onboarding Date"
-      description: When does the server need to be live in the gateway?
-      placeholder: "e.g., 2026-06-15 — The date the team needs this server available in the gateway. Used to prioritize the review queue. If tied to a product launch or sprint deadline, mention that in the notes."
-    validations:
-      required: false
+      label: "LLM Intake Reference"
+      description: "If Yes - approved, provide the LLM Intake ticket ID or approval reference."
+      placeholder: "LLM-2401 or approval email dated 2026-04-12"
 
-  - type: input
-    id: rd_ticket_ref
+  - type: markdown
     attributes:
-      label: "2.4 Related Ticket / Epic / Jira"
-      description: Link to any tracking ticket, epic, or feature request
-      placeholder: "e.g., https://jira.company.com/browse/PLAT-4242 — The review team may reference this for additional context or approval history."
-    validations:
-      required: false
+      value: "---"
 
-  - type: textarea
-    id: rd_summary
-    attributes:
-      label: "2.5 Summary of Request *"
-      description: A concise 3-5 sentence summary of what is being requested and why
-      placeholder: |
-        EXAMPLE — Replace with your summary:
-
-        We are requesting onboarding of an internal PostgreSQL query MCP server
-        that allows AI agents to run read-only SQL queries against our analytics
-        data warehouse. This will enable the Data Science team's agents to pull
-        metrics, generate reports, and answer business questions without manual
-        SQL execution. The server exposes 4 tools: run_query, list_tables,
-        describe_schema, and query_status. All queries are restricted to
-        read-only via a dedicated read-only database user. This is part of
-        our Q2 initiative to reduce data request turnaround time from days
-        to minutes.
-    validations:
-      required: true
-
-  # ═══════════════════════════════════════════
-  # SECTION 3 — BUSINESS CONTEXT
-  # ═══════════════════════════════════════════
+  # ================================================================
+  # PART 1 - BUSINESS & CONTEXT (REQUIRED AT INTAKE)
+  # ================================================================
   - type: markdown
     attributes:
       value: |
-        ## 3. Business Context
+        # PART 1 - Business & Context
+        *Required at intake.*
 
-        Help the review team understand the business value and impact of this MCP server.
-
-  - type: textarea
-    id: bc_use_case
-    attributes:
-      label: "3.1 Business Use Case *"
-      description: Describe the specific business problem or workflow this server enables
-      placeholder: |
-        EXAMPLE — Replace with your use case:
-
-        The Customer Support team handles ~500 tickets/day that require looking
-        up order status, account details, and shipping information from our
-        internal CRM and order management systems. Currently, agents manually
-        switch between 4 different dashboards and run 8-10 SQL queries per ticket.
-        This MCP server will let an AI agent (integrated into Zendesk) query
-        these systems directly, reducing average handle time from 12 minutes to
-        ~3 minutes and eliminating dashboard-switching context loss.
-
-        Expected monthly call volume: ~15,000 tool calls
-        Number of agents that will use this: 50 support agents
-    validations:
-      required: true
-
-  - type: textarea
-    id: bc_benefits
-    attributes:
-      label: "3.2 Expected Benefits"
-      description: Quantified benefits — time saved, cost reduced, accuracy improved, etc.
-      placeholder: |
-        EXAMPLE — Replace with your benefits:
-
-        - Reduce ticket resolution time by 75% (12 min → 3 min)
-        - Save ~375 engineer-hours per month across the support team
-        - Eliminate context-switching across 4 dashboards
-        - Reduce SQL query errors caused by manual copy-paste
-        - Enable self-service analytics for non-technical team members
-        - Estimated annual cost savings: $180,000 in engineering time
-
-        Metrics will be tracked via the TrueFoundry observability dashboard.
-    validations:
-      required: false
-
-  - type: textarea
-    id: bc_target_users
-    attributes:
-      label: "3.3 Target Users / Consumers *"
-      description: Who will use this MCP server? Which teams, roles, and what AI agents?
-      placeholder: |
-        EXAMPLE — Replace with your users:
-
-        Direct users (AI agents):
-        - Claude Code agents used by the Platform Engineering team
-        - Custom support agent running in Zendesk (integrated via Agent API)
-        - Data Science team's Jupyter assistant agent
-
-        Indirect users (humans benefiting):
-        - 50 customer support agents
-        - 15 platform engineers
-        - 10 data scientists
-
-        Access will be scoped per the RBAC rules in Section 6.
-    validations:
-      required: true
-
-  - type: textarea
-    id: bc_success_criteria
-    attributes:
-      label: "3.4 Success Criteria"
-      description: How will you measure that this MCP server is delivering value?
-      placeholder: |
-        EXAMPLE — Replace with your criteria:
-
-        1. [Adoption] >= 80% of target team uses the server within 30 days
-        2. [Latency] P95 tool response time < 2 seconds
-        3. [Reliability] Uptime >= 99.9% after onboarding
-        4. [Business] Ticket resolution time reduced by >= 50%
-        5. [Quality] < 1% error rate on tool calls
-        6. [Security] Zero data breaches or PII leaks in first 90 days
-
-        Measured via: TrueFoundry observability dashboards + business KPIs.
-    validations:
-      required: false
-
-  - type: textarea
-    id: bc_alternatives
-    attributes:
-      label: "3.5 Alternatives Considered"
-      description: What other approaches were evaluated before choosing this MCP server?
-      placeholder: |
-        EXAMPLE — Replace with your alternatives:
-
-        - Direct API integration: Rejected because each AI agent framework
-          would need a separate integration (N×M problem).
-        - Custom middleware: Rejected due to maintenance overhead.
-        - Vendor MCP server: No vendor offers a read-only SQL MCP server
-          compatible with our warehouse schema.
-        - Manual queries (status quo): Rejected due to scalability limits.
-
-        Conclusion: An MCP server registered in TrueFoundry Gateway provides
-        the best balance of security, governance, and developer experience.
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 4 — TECHNICAL SCOPE
-  # ═══════════════════════════════════════════
+  # -- Section 1 - Requester Information ----------------------------
   - type: markdown
     attributes:
-      value: |
-        ## 4. Technical Scope
+      value: "## 1. Requester Information"
 
-        Details about the technology stack, dependencies, and integration points.
-
-  - type: textarea
-    id: ts_tech_stack
+  - type: input
+    id: requester_name
     attributes:
-      label: "4.1 Technology Stack *"
-      description: Languages, frameworks, SDKs, and infrastructure components used to build and run this MCP server
-      placeholder: |
-        EXAMPLE — Replace with your stack:
-
-        Runtime: Python 3.12 on FastAPI
-        MCP Framework: FastMCP (Python SDK)
-        Hosting: Docker container on AWS ECS (Fargate)
-        Database: PostgreSQL 16 (Amazon RDS)
-        Cache: Redis 7 (ElastiCache)
-        Auth Middleware: Custom JWT validation via FastAPI middleware
-        Observability: OpenTelemetry exports to Datadog
-        CI/CD: GitHub Actions → ECR → ECS
-        Infrastructure: Terraform (infra-as-code in repo)
+      label: "Full Name"
+      description: "Your full name as it appears in HR systems."
+      placeholder: "John River"
     validations:
       required: true
 
-  - type: textarea
-    id: ts_dependencies
+  - type: input
+    id: requester_email
     attributes:
-      label: "4.2 Dependencies"
-      description: What external services, APIs, or libraries does this server depend on?
-      placeholder: |
-        EXAMPLE — Replace with your dependencies:
-
-        Internal:
-        - Analytics warehouse PostgreSQL (read-only replica)
-        - Internal secrets API (for credential rotation)
-        - Company IdP JWKS endpoint (token validation)
-
-        External:
-        - PyPI packages: fastmcp, httpx, pydantic, opentelemetry-api
-        - AWS services: ECS, RDS, ElastiCache, Secrets Manager
-
-        Runtime dependencies: Docker, Python 3.12+
-        Network dependencies: Route53, ALB, VPC endpoints for S3/Secrets Manager
+      label: "Work Email"
+      description: "All notifications will be sent here."
+      placeholder: "john.river@email.com"
     validations:
-      required: false
-
-  - type: textarea
-    id: ts_integration_points
-    attributes:
-      label: "4.3 Integration Points"
-      description: What systems does this server connect to, and what data flows through it?
-      placeholder: |
-        EXAMPLE — Replace with your integration points:
-
-        ┌─────────────┐     MCP JSON-RPC     ┌─────────────────┐
-        │  AI Agent   │ ◄──────────────────► │  MCP Server     │
-        │  (Claude)   │     streamable-http  │  (FastAPI)      │
-        └─────────────┘                      └────────┬────────┘
-                                                      │
-                                          ┌───────────┴───────────┐
-                                          │  PostgreSQL (RDS)     │
-                                          │  Read-only replica    │
-                                          └───────────────────────┘
-                                                      │
-                                          ┌───────────┴───────────┐
-                                          │  Redis Cache          │
-                                          │  (query cache, TTL)   │
-                                          └───────────────────────┘
-
-        Data flow: Agent sends SQL query → MCP server validates → checks
-        Redis cache → if miss, queries PostgreSQL → returns result.
-        All queries run as a read-only database user with statement timeout.
-    validations:
-      required: false
+      required: true
 
   - type: input
-    id: ts_protocol_version
+    id: requester_team
     attributes:
-      label: "4.4 MCP Protocol Version"
-      description: Which MCP specification version is implemented?
-      placeholder: "e.g., v0.130 — TrueFoundry v0.130 introduced transport transparency and OAuth chaining. Check your MCP framework docs. FastMCP currently targets MCP v0.130+."
+      label: "Team / Department"
+      description: "The team funding this work."
+      placeholder: "Sales Operations"
     validations:
-      required: false
+      required: true
 
   - type: input
-    id: ts_server_version
+    id: requester_manager
     attributes:
-      label: "4.5 Server Version / Revision"
-      description: The current version of the MCP server software
-      placeholder: "e.g., v1.2.3 (git sha: a1b2c3d) — This helps the review team correlate the form with the exact code version deployed. Update this field when submitting amendments."
+      label: "Manager"
+      description: "Required for cost-center approval."
+      placeholder: "Robert Chen"
     validations:
-      required: false
+      required: true
 
-  # ═══════════════════════════════════════════
-  # SECTION 5 — MCP ARCHITECTURE
-  # ═══════════════════════════════════════════
+  - type: input
+    id: date_submitted
+    attributes:
+      label: "Date Submitted"
+      description: "Today's date. Format: YYYY-MM-DD."
+      placeholder: "YYYY-MM-DD"
+
+  # -- Section 2 - Request Details ----------------------------------
   - type: markdown
     attributes:
-      value: |
-        ## 5. MCP Architecture
-
-        How the MCP server is deployed, connected, and how it manages state.
+      value: "## 2. Request Details"
 
   - type: dropdown
-    id: ma_server_type
+    id: request_type
     attributes:
-      label: "5.1 Server Type *"
-      description: "Remote = standalone HTTP server. Virtual = bundle of multiple MCP servers. Stdio = CLI process spawned by gateway. OpenAPI = converted from REST spec. Pre-built = official connector (GitHub, Sentry, etc.)."
+      label: "Request Type"
+      description: "What kind of work are you requesting?"
       options:
-        - "Remote MCP Server"
-        - "Virtual MCP Server (bundle of multiple servers)"
-        - "Hosted Stdio-based MCP Server"
-        - "Import from OpenAPI Spec"
-        - "Official / Pre-built (GitHub, Sentry, Atlassian, etc.)"
-    validations:
-      required: true
-
-  - type: input
-    id: ma_official_type
-    attributes:
-      label: "5.2 If Official Pre-built — specify which"
-      description: "TrueFoundry pre-built connectors: GitHub, Sentry, Atlassian (Jira, Confluence), Figma, Slack, Datadog, and more."
-      placeholder: "e.g., GitHub — The official TrueFoundry GitHub MCP connector. Uses OAuth2 with Authorization Code grant. Tools: search_repositories, create_issue, list_prs, get_commit_history, list_workflows. See TrueFoundry docs for the full tool list for each connector."
-    validations:
-      required: false
-
-  - type: dropdown
-    id: ma_transport
-    attributes:
-      label: "5.3 Transport Protocol *"
-      description: "TrueFoundry v0.130+ preserves the remote server's transport. Streamable HTTP is preferred (lower latency, stateless). SSE is for legacy servers. Check your MCP framework documentation."
-      options:
-        - "Streamable HTTP"
-        - "SSE (Server-Sent Events)"
-        - "Both"
-    validations:
-      required: true
-
-  - type: input
-    id: ma_server_url
-    attributes:
-      label: "5.4 Server URL / Endpoint *"
-      description: Full URL where the gateway reaches this MCP server
-      placeholder: "e.g., https://mcp-postgres.internal.company.com:443/mcp — Must be reachable by the TrueFoundry Gateway (same VPC, via PrivateLink, or over internet with TLS). For streamable-http: use /mcp path. For SSE: use /sse or events endpoint. Include port if non-standard."
-    validations:
-      required: true
-
-  - type: textarea
-    id: ma_arch_desc
-    attributes:
-      label: "5.5 Architecture Description"
-      description: Describe the high-level architecture, components, and data flow
-      placeholder: |
-        EXAMPLE — Replace with your architecture:
-
-        ┌──────────────┐  MCP JSON-RPC  ┌──────────────┐  SQL  ┌────────────┐
-        │  AI Agent    │◄──────────────►│ MCP Server   │──────►│ PostgreSQL │
-        │  (Client)    │  HTTPS         │ (FastAPI)    │       │ (Read-only)│
-        └──────────────┘                └──────┬───────┘       └────────────┘
-                                               │
-                                        ┌──────┴───────┐
-                                        │  Redis Cache │
-                                        │  (TTL: 60s)  │
-                                        └──────────────┘
-
-        - 2 replicas behind an ALB, auto-scaling based on CPU
-        - Connection pooling via PgBouncer (max 20 connections)
-        - Statement timeout: 30s, max result rows: 10,000
-        - Read-only PostgreSQL user with SELECT-only grants
-        - Cache hit rate target: >70%
-    validations:
-      required: false
-
-  - type: dropdown
-    id: ma_stateful
-    attributes:
-      label: "5.6 State Management"
-      description: "Stateless = each request is independent (preferred, scales horizontally). Stateful = server maintains session state between requests (needs session affinity / sticky sessions)."
-      options:
-        - "Stateless"
-        - "Stateful (session affinity required)"
-    validations:
-      required: true
-
-  - type: textarea
-    id: ma_session_handling
-    attributes:
-      label: "5.7 Session Handling Details"
-      description: If stateful, describe how sessions are managed, timeouts, and cleanup
-      placeholder: "e.g., N/A (stateless server) — Each request is independent. No session state stored server-side. All context is passed in the request payload. If stateful: sessions expire after 15 minutes of inactivity. Session data stored in Redis with TTL. Up to 1000 concurrent sessions supported."
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 6 — TOOLS AND BEHAVIOR
-  # ═══════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ## 6. Tools and Behavior
-
-        Every tool this MCP server exposes. Be exhaustive — unreported tools will not be registered.
-
-  - type: textarea
-    id: tb_inventory
-    attributes:
-      label: "6.1 Tool Inventory *"
-      description: "One tool per block. Include: name, description, input JSON Schema, operation (Read/Write/Both), risk level, and any specific behavior notes."
-      placeholder: |
-        === COPY THIS TEMPLATE, REPEAT FOR EACH TOOL ===
-
-        Tool 1:
-          Name: search_documents
-          Description: Full-text search across internal documentation.
-                        Returns matching documents with relevance scores.
-          Input Schema: {
-            "type": "object",
-            "properties": {
-              "query":    { "type": "string", "minLength": 2, "maxLength": 500 },
-              "limit":    { "type": "integer", "default": 10, "maximum": 100 },
-              "filters":  { "type": "object", "properties": {
-                             "author": { "type": "string" },
-                             "date_from": { "type": "string", "format": "date" }
-                           }}
-            },
-            "required": ["query"]
-          }
-          Output: Array of { id, title, snippet, score, url, author, date }
-          Operation: Read
-          Risk: Low
-          Idempotent: Yes
-          Timeout: 10s
-
-        Tool 2:
-          Name: create_incident
-          Description: Creates a new incident in the incident management
-                        system. Assigns severity and notifies on-call.
-          Input Schema: {
-            "type": "object",
-            "properties": {
-              "title":    { "type": "string", "maxLength": 200 },
-              "severity": { "type": "string", "enum": ["SEV1","SEV2","SEV3"] },
-              "service":  { "type": "string" },
-              "description": { "type": "string", "maxLength": 5000 }
-            },
-            "required": ["title", "severity"]
-          }
-          Output: { incident_id, url, created_at, assigned_to }
-          Operation: Write
-          Risk: Critical
-          Idempotent: No (creates a new resource each time)
-          Approval Required: Yes (user must confirm)
-          Timeout: 30s
-
-        Tool 3:
-          Name: bulk_update_users
-          Description: Batch update user attributes. Can modify roles,
-                        permissions, and account status for up to 100 users.
-          Input Schema: {
-            "type": "object",
-            "properties": {
-              "user_ids": { "type": "array", "items": { "type": "string" },
-                            "maxItems": 100 },
-              "updates":  { "type": "object" },
-              "dry_run":  { "type": "boolean", "default": true }
-            },
-            "required": ["user_ids", "updates"]
-          }
-          Operation: Write
-          Risk: High
-          Idempotent: Yes (same inputs = same resulting state)
-          Approval Required: Yes
-          Timeout: 60s
+        - "New build"
+        - "Modification to existing server"
+        - "Decommission"
+        - "Consultation only"
     validations:
       required: true
 
   - type: dropdown
-    id: tb_risk_default
+    id: priority
     attributes:
-      label: "6.2 Default Risk Classification"
-      description: "If a tool is not individually classified, what default risk level applies? Low = read-only, no side effects. Medium = read with some data sensitivity. High = writes or mutations. Critical = destructive or security-impacting."
+      label: "Priority"
+      description: "If unsure, pick Medium. The AI Hub team will confirm during triage."
       options:
         - "Low"
         - "Medium"
         - "High"
         - "Critical"
+      default: 1
     validations:
       required: true
 
-  - type: dropdown
-    id: tb_idempotency
+  - type: input
+    id: target_go_live
     attributes:
-      label: "6.3 Are All Tools Idempotent?"
-      description: "Idempotent = calling the same tool with the same arguments produces the same result (safe for retries). If some tools are not idempotent, list them in 6.1."
-      options:
-        - "Yes — all tools are idempotent"
-        - "No — some tools have side effects (specified in 6.1)"
+      label: "Target Go-Live Date"
+      description: "Realistic date, not aspirational. Use YYYY-MM-DD format."
+      placeholder: "2026-07-15"
     validations:
       required: true
 
   - type: textarea
-    id: tb_error_handling
+    id: urgency_justification
     attributes:
-      label: "6.4 Error Handling & Error Codes"
-      description: "Describe how the MCP server reports errors. What error codes, messages, and HTTP status codes does it use?"
+      label: "Urgency Justification"
+      description: "Required only if Priority is High or Critical. What breaks if this slips?"
       placeholder: |
-        EXAMPLE — Replace with your error handling:
+        e.g. Quarter-end deadline in 60 days; sales team can't quote without this
+        integration in place. Manual workaround costs ~40 rep-hours per week.
 
-        The server returns standard MCP JSON-RPC error responses:
-        - Code -32700: Parse error (invalid JSON)
-        - Code -32600: Invalid request (missing required fields)
-        - Code -32601: Method not found (unknown tool name)
-        - Code -32602: Invalid params (schema validation failure)
-        - Code -32000: Query timeout (exceeded 30s statement timeout)
-        - Code -32001: Rate limited (too many requests)
-        - Code -32002: Database connection error
-        - Code -32003: Query rejected (blocked pattern matched)
-
-        HTTP status codes:
-        - 200: Success (for streamable-http)
-        - 400: Bad request (schema validation failed)
-        - 401: Authentication failed
-        - 403: Authorization denied (RBAC blocked)
-        - 429: Too many requests
-        - 500: Internal server error
-        - 503: Service unavailable (maintenance / overloaded)
-    validations:
-      required: false
+  # -- Section 3 - Business Context ---------------------------------
+  - type: markdown
+    attributes:
+      value: "## 3. Business Context"
 
   - type: textarea
-    id: tb_concurrency
+    id: problem_statement
     attributes:
-      label: "6.5 Concurrency Behavior"
-      description: How does the server handle multiple simultaneous requests? Any queuing, connection pooling, or locking?
-      placeholder: "e.g., The server uses asyncio with a thread pool for database queries. Max 20 concurrent queries (limited by PgBouncer connections). Additional requests are queued with a 5s timeout. Database queries use SELECT ... NOWAIT to avoid lock contention. Each request gets a unique correlation ID for tracing."
+      label: "Problem Statement"
+      description: "What problem are we solving? Keep it to 2-3 sentences."
+      placeholder: |
+        e.g. Sales reps spend 20+ minutes per call digging through Salesforce for
+        opportunity history, contacts, and recent activity. We want Claude to surface
+        this information on demand so reps spend more time selling and less time searching.
     validations:
-      required: false
+      required: true
 
-  # ═══════════════════════════════════════════
-  # SECTION 7 — SECRETS AND AUTH
-  # ═══════════════════════════════════════════
+  - type: textarea
+    id: business_outcome
+    attributes:
+      label: "Expected Business Outcome"
+      description: "Time saved, revenue, risk reduced, etc. Be specific and measurable."
+      placeholder: |
+        e.g. Save ~30 min/rep/day. Estimated 5,000 hours/year recovered across the
+        250-person sales org. Target: 15% increase in calls per rep per week within
+        90 days of launch.
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_users
+    attributes:
+      label: "Target Users"
+      description: "Who will use it? Include team size and roles."
+      placeholder: |
+        e.g. Sales reps and managers - approximately 250 people across NA and EMEA.
+        Pilot group: 10 reps in the West Region during weeks 1-2.
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: "Definition of Done"
+      description: "Measurable success criteria. How will we know this is finished?"
+      placeholder: |
+        e.g. Reps can ask Claude about any opportunity by name or ID and get account
+        info, last 5 activities, open tasks, and key contacts within 5 seconds.
+        95% of test queries return correct results in UAT.
+    validations:
+      required: true
+
+  # -- Section 4 - Technical Scope (high-level) ---------------------
   - type: markdown
     attributes:
       value: |
-        ## 7. Secrets and Auth
+        ## 4. Technical Scope (high-level)
+        *Just the high-level picture here. Detailed architecture is in Part 2.*
 
-        Authentication between the TrueFoundry Gateway and your MCP server (outbound auth).
-        Reference: [Auth & Security docs](https://www.truefoundry.com/docs/ai-gateway/mcp/mcp-gateway-auth-security)
-
-  - type: dropdown
-    id: sa_auth_type
+  - type: textarea
+    id: systems_to_connect
     attributes:
-      label: "7.1 Authentication Type *"
-      description: "API Key = static header. OAuth2 = OAuth flow managed by gateway. Token Passthrough = forward user's JWT. Token Forwarding = inject custom headers. None = public."
-      options:
-        - "API Key"
-        - "OAuth2 (Authorization Code)"
-        - "OAuth2 (Client Credentials)"
-        - "Token Passthrough"
-        - "Token Forwarding (Custom Headers)"
-        - "None (Public / No Auth)"
+      label: "What downstream system the MCP server is connecting to?"
+      description: "List the systems the MCP server needs to access."
+      placeholder: |
+        e.g.
+        - Salesforce (Sales Cloud) - primary
+        - Internal Customer Health API (read-only)
+        - Snowflake data warehouse (account_summary view)
     validations:
       required: true
 
-  - type: markdown
+  - type: textarea
+    id: key_use_cases
     attributes:
-      value: "### 7a. API Key Configuration"
+      label: "Key Actions / Use Cases"
+      description: "List the specific actions the AI should perform."
+      placeholder: |
+        e.g.
+        1. Look up opportunity by name or ID
+        2. List recent activities on an account
+        3. Find primary contact for an account
+        4. Show open tasks assigned to current rep
+        5. Summarize account health (open opps + activity + tickets)
+    validations:
+      required: true
 
   - type: dropdown
-    id: sa_apikey_mode
+    id: ai_clients
     attributes:
-      label: "7.2 API Key — Credential Mode"
-      description: "Static Header = one shared key (simple). Per-User API Key = individual keys per user (better audit trail)."
+      label: "AI Clients"
+      description: "Which AI clients will use this server? Hold Ctrl/Cmd for multiple."
+      multiple: true
       options:
-        - "Static Header (shared key)"
-        - "Per-User API Key"
+        - "Claude Desktop"
+        - "Claude Code"
+        - "Claude in Chrome"
+        - "Copilot Studio"
+        - "Custom internal app"
+        - "Other (specify in notes)"
     validations:
-      required: false
+      required: true
 
-  - type: input
-    id: sa_apikey_header
-    attributes:
-      label: "7.3 API Key — Header Name"
-      description: The HTTP header the server expects
-      placeholder: "e.g., X-API-Key — The header name checked by the server's auth middleware. Common: Authorization (with Bearer prefix), X-API-Key, X-Token. Confirm with the server's auth implementation."
-    validations:
-      required: false
-
-  - type: input
-    id: sa_apikey_source
-    attributes:
-      label: "7.4 API Key — Credential Source / Provisioning"
-      description: Where does the API key come from and how is it rotated?
-      placeholder: "e.g., HashiCorp Vault path: secret/mcp/analytics-api-key — Auto-rotated every 30 days. The platform team provisions the key and stores it in Vault. TrueFoundry will read it from the vault path provided."
-    validations:
-      required: false
-
-  - type: markdown
-    attributes:
-      value: "### 7b. OAuth2 Configuration"
-
-  - type: input
-    id: sa_oauth_auth_url
-    attributes:
-      label: "7.5 OAuth2 — Authorization URL"
-      placeholder: "e.g., https://github.com/login/oauth/authorize — Users are redirected here to log in. For GitHub: https://github.com/login/oauth/authorize. For Okta: https://company.okta.com/oauth2/v1/authorize."
-    validations:
-      required: false
-
-  - type: input
-    id: sa_oauth_token_url
-    attributes:
-      label: "7.6 OAuth2 — Token URL"
-      placeholder: "e.g., https://github.com/login/oauth/access_token — TrueFoundry exchanges the auth code for a token here. For GitHub: https://github.com/login/oauth/access_token. For Okta: https://company.okta.com/oauth2/v1/token."
-    validations:
-      required: false
-
-  - type: input
-    id: sa_oauth_client_id
-    attributes:
-      label: "7.7 OAuth2 — Client ID"
-      placeholder: "e.g., Iv1.12345abcde67890 — From the OAuth app registration in your provider's developer portal. For GitHub: Settings > Developer Settings > OAuth Apps."
-    validations:
-      required: false
-
-  - type: input
-    id: sa_oauth_client_secret
-    attributes:
-      label: "7.8 OAuth2 — Client Secret"
-      description: Stored encrypted in TrueFoundry vault. Never shared with end users.
-      placeholder: "e.g., 9a8b7c6d5e4f3a2b1c0d — Generated alongside the Client ID. TrueFoundry encrypts this at rest and only uses it server-side for the OAuth token exchange flow."
-    validations:
-      required: false
-
-  - type: input
-    id: sa_oauth_scopes
-    attributes:
-      label: "7.9 OAuth2 — Scopes"
-      description: Comma-separated. Use least-privilege — only request what the tools need.
-      placeholder: "e.g., repo, read:org — For GitHub: 'repo' = full repo access, 'read:org' = org membership. For Slack: 'channels:read, chat:write'. For Google: 'https://www.googleapis.com/auth/drive.readonly'. Minimum required only."
-    validations:
-      required: false
-
-  - type: markdown
-    attributes:
-      value: "### 7c. Token Passthrough Configuration"
-
-  - type: textarea
-    id: sa_token_validation
-    attributes:
-      label: "7.10 Token Passthrough — Validation Method"
-      description: How does the MCP server validate the forwarded JWT?
-      placeholder: |
-        EXAMPLE — Replace with your validation:
-
-        The MCP server validates JWTs using:
-        1. JWKS endpoint: https://auth.company.com/.well-known/jwks.json
-        2. Algorithm: RS256 (check kid in JWT header matches JWKS keys)
-        3. Claims verified: exp (expiry), nbf (not before), iss (issuer),
-           aud (audience must match server's configured value)
-        4. Token must be signed by a key in our IdP's JWKS
-
-        The server uses the `python-jose` library with middleware on all
-        protected endpoints. Invalid/expired tokens return 401.
-    validations:
-      required: false
-
-  - type: input
-    id: sa_token_audience
-    attributes:
-      label: "7.11 Token Passthrough — Expected Audience / Issuer"
-      placeholder: "e.g., aud: https://mcp.internal.company.com, iss: https://auth.company.com/ — These claims must match exactly what your server validates. The 'aud' should identify your MCP server. The 'iss' is your IdP's issuer URL. Add any custom claim requirements."
-    validations:
-      required: false
-
-  - type: markdown
-    attributes:
-      value: "### 7d. Custom Headers Configuration"
-
-  - type: textarea
-    id: sa_custom_headers
-    attributes:
-      label: "7.12 Token Forwarding — Headers to Inject"
-      description: Each header name, value source, and purpose
-      placeholder: |
-        EXAMPLE — Replace with your custom headers:
-
-        Header 1: X-Internal-Auth
-          Value: Vault path secret/mcp/internal-token
-          Purpose: Authenticates with internal load balancer
-          Format: Bearer <token>
-
-        Header 2: X-Client-Id
-          Value: static "mcp-gateway-prod"
-          Purpose: Identifies the caller downstream
-
-        Header 3: X-Correlation-Id
-          Value: auto-generated UUID per request
-          Purpose: End-to-end request tracing
-
-        For each: specify exact header name, value source (static/vault/dynamic),
-        and any format requirements.
-    validations:
-      required: false
-
-  - type: textarea
-    id: sa_rotation_policy
-    attributes:
-      label: "7.13 Secret Rotation Policy"
-      description: How often are secrets rotated? Who is responsible? How are clients notified?
-      placeholder: "e.g., API keys are rotated every 90 days by the Security Team. The new key is published to Vault 7 days before rotation. TrueFoundry auto-reads from Vault on each request so no manual update is needed. For OAuth2: client secrets are rotated by the provider; we update them in TrueFoundry within 24 hours of rotation."
-    validations:
-      required: false
-
-  - type: input
-    id: sa_cred_storage
-    attributes:
-      label: "7.14 Credential Storage"
-      description: Where are credentials stored and how are they accessed?
-      placeholder: "e.g., HashiCorp Vault (production) + AWS Secrets Manager (DR). TrueFoundry will pull credentials from Vault at runtime. The Vault path is secret/mcp/prod/*. Access is granted via the mcp-server-team Vault policy."
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 8 — DATA SECURITY
-  # ═══════════════════════════════════════════
+  # -- Section 5 - Data & Security ----------------------------------
   - type: markdown
     attributes:
       value: |
-        ## 8. Data Security
-
-        How data is classified, protected, and governed at every stage of the tool call lifecycle.
+        ## 5. Data & Security
+        *Restricted data, PII, or write actions trigger automatic security and privacy review.*
 
   - type: dropdown
-    id: ds_classification
+    id: data_sensitivity
     attributes:
-      label: "8.1 Data Classification Level *"
-      description: "Public = no sensitivity. Internal = company-private. Confidential = sensitive business data. Restricted = need-to-know. PII = personally identifiable information."
+      label: "Data sensitivity of the downstream system"
+      description: "Use the org's data-classification standard."
       options:
         - "Public"
         - "Internal"
         - "Confidential"
-        - "Restricted"
-        - "PII"
+        - "Other (specify in notes)"
     validations:
       required: true
 
   - type: dropdown
-    id: ds_pii_input
+    id: contains_pii
     attributes:
-      label: "8.2 Inspect Tool Inputs for PII / Secrets?"
-      description: "Yes = gateway scans inputs before forwarding. Recommended for servers that accept user-generated content. Blocks emails, SSNs, credit cards, API keys, passwords."
+      label: "Contains PII?"
+      description: "Any personally identifiable information? Triggers privacy review if Yes."
       options:
         - "Yes"
         - "No"
+        - "Unsure"
     validations:
       required: true
 
   - type: dropdown
-    id: ds_pii_output
+    id: write_actions
     attributes:
-      label: "8.3 Inspect Tool Outputs for PII / Secrets?"
-      description: "Yes = gateway scans responses before returning to agent. Critical for servers that query databases or file systems containing sensitive data."
+      label: "Write Actions?"
+      description: "Will the MCP server modify data in source systems? Triggers system-owner approval if Yes."
       options:
         - "Yes"
         - "No"
+        - "Unsure - Will decide later"
     validations:
       required: true
 
   - type: dropdown
-    id: ds_encryption_in_transit
+    id: auth_method
     attributes:
-      label: "8.4 Encryption In Transit"
-      description: "TLS = standard HTTPS. mTLS = mutual TLS with client certificate. None = not recommended for any data classification above Public."
+      label: "Authentication Method"
+      description: "Preferred auth method. AI Hub will confirm feasibility on TrueFoundry."
       options:
-        - "TLS 1.2+"
-        - "mTLS"
-        - "None"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: ds_encryption_at_rest
-    attributes:
-      label: "8.5 Encryption At Rest"
-      description: Does the MCP server encrypt data it stores (caches, logs, temporary files)?
-      options:
-        - "Yes (AES-256)"
-        - "Yes (provider-managed)"
-        - "No ephemeral storage"
-        - "No"
+        - "PAT"
+        - "OAuth 2.0"
+        - "API Key"
+        - "JWT"
+        - "Other (specify in notes)"
     validations:
       required: true
 
   - type: textarea
-    id: ds_input_validation
+    id: access_scope
     attributes:
-      label: "8.6 Input Validation & Guardrails"
-      description: What validation does the server perform on tool inputs before processing?
+      label: "Access Scope"
+      description: "Who should have access and under what conditions?"
       placeholder: |
-        EXAMPLE — Replace with your guardrails:
-
-        - All string inputs have maxLength constraints (prevent injection)
-        - SQL queries are parsed to verify SELECT-only (no DDL/DML)
-        - Blocked patterns: DROP, DELETE, INSERT, UPDATE, ALTER, TRUNCATE,
-          CREATE, EXEC, xp_cmdshell, pg_sleep, UNION (SQLi)
-        - Input size limit: 100 KB per request
-        - Rate limit: 60 requests/min per user, 300/min globally
-        - Statement timeout: 30 seconds (enforced at DB level)
-        - Max result rows: 10,000 (prevents data exfiltration)
-        - Only the read-only DB user's schema is accessible
+        e.g. All Sales Cloud users with existing Salesforce access. Same row-level
+        permissions enforced via user identity passthrough. No service-to-service
+        access for end users.
     validations:
-      required: false
+      required: true
 
-  - type: textarea
-    id: ds_output_filtering
+  # -- Section 6 - Ownership & Operations ---------------------------
+  - type: markdown
     attributes:
-      label: "8.7 Output Filtering"
-      description: Does the server filter or sanitize tool outputs before returning them?
-      placeholder: "e.g., Results are scanned for: email addresses (masked as ***@***.com), phone numbers (masked), API keys (redacted entirely), internal IPs (masked). PII columns are excluded from query results via database views (not at application level). No raw secrets ever leave the database."
-    validations:
-      required: false
+      value: "## 6. Ownership & Operations"
 
-  - type: textarea
-    id: ds_data_residency
+  - type: input
+    id: business_owner
     attributes:
-      label: "8.8 Data Residency Requirements"
-      description: Any geographic or jurisdictional constraints on where data can be processed or stored?
-      placeholder: "e.g., All data must remain within US regions (us-east-1, us-west-2). No cross-border data transfer. Database is in us-east-1, Redis cache in us-east-1, gateway must also be in US region. This is required for SOC 2 compliance. If the gateway is in EU, we need a proxy plane in US."
+      label: "Business Owner"
+      description: "Signs off on requirements and changes."
+      placeholder: "Robert Chen (VP Sales Ops)"
     validations:
-      required: false
+      required: true
+
+  - type: input
+    id: technical_poc
+    attributes:
+      label: "Technical POC"
+      description: "Day-to-day technical contact on the requester side."
+      placeholder: "Priya Sharma (Salesforce Admin Lead)"
+    validations:
+      required: true
+
+  - type: input
+    id: decision_maker
+    attributes:
+      label: "Decision-Maker for Trade-offs"
+      description: "Single person who can decide when scope, time, and budget conflict."
+      placeholder: "Robert Chen - single point of contact for trade-off calls"
+    validations:
+      required: true
+
+  # ================================================================
+  # PART 2 - TECHNICAL DEEP DIVE (OPTIONAL AT INTAKE)
+  # ================================================================
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        # PART 2 - Technical Deep Dive
+        *These fields are usually completed during scoping. If you don't know an answer
+        yet, leave the field blank - we'll work through it together in the scoping session.*
+
+  # -- Section 7 - MCP Architecture ---------------------------------
+  - type: markdown
+    attributes:
+      value: "## 7. MCP Architecture"
 
   - type: dropdown
-    id: ds_compliance
+    id: mcp_primitives
     attributes:
-      label: "8.9 Compliance Standards *"
-      description: Select all that apply. These determine audit, encryption, and retention requirements.
+      label: "MCP Primitives Needed"
+      description: "Which MCP primitives does this server need to expose? Select all that apply."
       multiple: true
       options:
-        - "SOC 2"
-        - "HIPAA"
-        - "ITAR"
-        - "GDPR"
-        - "PCI-DSS"
-        - "FedRAMP"
-        - "None"
-    validations:
-      required: true
+        - "Tools (functions the AI can call)"
+        - "Resources (data the AI can read)"
+        - "Prompts (reusable templates)"
+        - "Sampling (server-initiated AI calls)"
 
-  # ═══════════════════════════════════════════
-  # SECTION 9 — PERFORMANCE AND LIMITS
-  # ═══════════════════════════════════════════
+  - type: dropdown
+    id: transport_type
+    attributes:
+      label: "Transport Type"
+      description: "How will AI clients connect to this MCP server? TrueFoundry supports Streamable HTTP; specify in notes if another transport is required."
+      options:
+        - "Streamable HTTP (remote, newer spec)"
+        - "SSE (deprecated)"
+        - "stdio (local only)"
+        - "Other (specify in notes)"
+
+  - type: dropdown
+    id: hosting_model
+    attributes:
+      label: "Hosting Model"
+      description: "Where will the MCP server run? Provide details in notes for anything not listed."
+      options:
+        - "Client Azure"
+        - "Client AWS"
+        - "Client GCP"
+        - "SaaS hosted"
+        - "Other (specify in notes)"
+
+  # -- Section 8 - Tools & Behavior --------------------------------
   - type: markdown
     attributes:
       value: |
-        ## 9. Performance and Limits
-
-        Capacity, rate limits, and performance expectations for this MCP server.
-
-  - type: input
-    id: pl_expected_throughput
-    attributes:
-      label: "9.1 Expected Throughput"
-      description: Estimated tool calls per day / per minute
-      placeholder: "e.g., ~10,000 calls/day, peak ~100 calls/minute — Current estimate based on 50 users × ~200 queries/day. Plan to scale to 50,000 calls/day within 6 months. Peak traffic is 9-11 AM and 2-4 PM when most teams are active."
-    validations:
-      required: false
-
-  - type: input
-    id: pl_rate_limit
-    attributes:
-      label: "9.2 Rate Limits"
-      description: Maximum requests per user, per IP, and globally
-      placeholder: "e.g., Per-user: 60 req/min, burst 100. Global: 300 req/min, burst 500. Per IP: 100 req/min. These limits are enforced by the MCP server middleware. The gateway also has rate limiting which can be configured as an additional layer. Adjust based on your infrastructure capacity."
-    validations:
-      required: false
-
-  - type: input
-    id: pl_payload_max
-    attributes:
-      label: "9.3 Max Payload Size"
-      description: Maximum size of a single tool call input and output
-      placeholder: "e.g., Input: 100 KB. Output: 5 MB. Input limit prevents abuse via oversized queries. Output limit prevents memory issues and slow responses. If a query exceeds 5 MB results, the server returns a warning and suggests adding filters. Adjust based on your data size."
-    validations:
-      required: false
-
-  - type: input
-    id: pl_latency
-    attributes:
-      label: "9.4 Expected Latency"
-      description: Expected response times (P50, P95, P99) for typical tool calls
-      placeholder: "e.g., P50: 200ms, P95: 1.5s, P99: 5s — Simple queries (SELECT with index) complete in <200ms. Complex analytical queries may take 1-5s. Cache hits: <50ms. Cache misses: 200ms-5s depending on query complexity. Timeout set at 30s for all queries."
-    validations:
-      required: false
-
-  - type: input
-    id: pl_timeout
-    attributes:
-      label: "9.5 Timeout Configuration"
-      description: Request timeout at the MCP server and downstream service level
-      placeholder: "e.g., MCP server timeout: 35s (in FastAPI). Database statement timeout: 30s (PostgreSQL config). Gateway timeout: 60s (TrueFoundry default). Total end-to-end timeout should not exceed 60s. Adjust based on your slowest queries."
-    validations:
-      required: false
+        ## 8. Tools & Behavior
+        *Tool descriptions drive how the AI decides when to call each tool. Be precise.*
 
   - type: textarea
-    id: pl_caching
+    id: proposed_tools
     attributes:
-      label: "9.6 Caching Strategy"
-      description: How and where are responses cached? What is the cache invalidation strategy?
+      label: "Proposed Tools - Names and Descriptions"
+      description: "List each tool with a one-line description of what it does. Use snake_case for names."
       placeholder: |
-        EXAMPLE — Replace with your caching strategy:
+        e.g.
+        search_opportunities - Find opportunities by name, account, owner, or stage.
+            Returns up to 20 matches with key fields.
+        get_opportunity_detail - Get the full record for a single opportunity by ID,
+            including custom fields.
+        list_recent_activities - Last N activities (calls, emails, meetings) on an
+            account. Default N=5.
+        get_account_health - Summarize open opportunities, recent activity, support
+            tickets, and renewal status for an account.
+      render: text
 
-        - Redis cache in front of PostgreSQL
-        - Cache key = hash of (query + parameters)
-        - TTL: 60 seconds for all results
-        - Cache invalidation: time-based only (no write-through)
-        - Cache hit rate target: >70%
-        - Cache size: ~500 MB (LRU eviction)
-        - Not cached: queries containing NOW(), RANDOM(), or
-          other non-deterministic functions (detected at parse time)
-        - Users can bypass cache via force_refresh=true parameter
-    validations:
-      required: false
+  # -- Section 9 - Secrets & Auth ----------------------------------
+  - type: markdown
+    attributes:
+      value: "## 9. Secrets & Auth"
+
+  - type: dropdown
+    id: secrets_management
+    attributes:
+      label: "Secrets management system"
+      description: "Where will the MCP server's credentials (API keys, OAuth client secrets) be stored and managed?"
+      options:
+        - "HashiCorp Vault"
+        - "AWS Secrets Manager"
+        - "Azure Key Vault"
+        - "GCP Secret Manager"
+        - "TrueFoundry secrets"
+        - "Other (specify in notes)"
+        - "TBD - recommend best fit"
+
+  - type: input
+    id: secrets_admin
+    attributes:
+      label: "TrueFoundry secret group admin"
+      description: "Who should be the admin for the TrueFoundry secret group for this MCP server?"
+      placeholder: "Priya Sharma (priya.sharma@company.com)"
+
+  - type: dropdown
+    id: token_rotation
+    attributes:
+      label: "Token Rotation Cadence"
+      description: "How often should credentials be rotated or refreshed?"
+      options:
+        - "30 days"
+        - "60 days"
+        - "90 days"
+        - "180 days"
+        - "As needed / on compromise"
+        - "Other (specify in notes)"
 
   - type: textarea
-    id: pl_scaling
+    id: service_account_details
     attributes:
-      label: "9.7 Scaling Behavior"
-      description: How does the server scale under load? Any auto-scaling, concurrency limits, or backpressure?
-      placeholder: "e.g., Auto-scaling: ECS Service Auto Scaling based on CPU > 70%. Min 2 replicas, max 10. Each replica handles ~50 concurrent requests. Connection pooling: PgBouncer with max 20 connections per replica. Backpressure: when all connections are in use, new requests are queued (max 100). If queue is full, returns 503. Cold start: ~5s for a new ECS task."
-    validations:
-      required: false
+      label: "Service Account Details"
+      description: "If using a service account, describe its scope and permissions."
+      placeholder: |
+        e.g. Dedicated Salesforce service account: ai-hub-mcp@company.com.
+        Read-only profile scoped to Opportunity, Account, Contact, and Task objects.
 
-  # ═══════════════════════════════════════════
-  # SECTION 10 — LOGGING AND OBSERVABILITY
-  # ═══════════════════════════════════════════
+  # -- Section 10 - Environments & Testing --------------------------
+  - type: markdown
+    attributes:
+      value: "## 10. Environments & Testing"
+
+  - type: dropdown
+    id: staging_env
+    attributes:
+      label: "Non-production environment availability"
+      description: "Is there a dev, stage, or UAT environment available for the downstream system this MCP server will connect to?"
+      options:
+        - "Yes - already exists"
+        - "No - can provision one"
+        - "No - must build against prod (read-only)"
+        - "Unknown"
+
+  - type: textarea
+    id: environment_details
+    attributes:
+      label: "Environment Details and URL"
+      description: "Share the url of MCP server "
+      placeholder: |
+        e.g. Salesforce dev: https://acme-uat.dev.my.salesforce.com/mcp/
+
+  # -- Section 11 - Risks & Open Questions --------------------------
+  - type: textarea
+    id: open_questions
+    attributes:
+      label: "Open Questions for AI Hub"
+      description: "Questions you'd like the AI Hub team to address during scoping."
+      placeholder: |
+        e.g.
+        - Can we get a shared connection pool to stay under the SF API limit?
+        - Is there a pattern for response caching that's already approved?
+        - What's the recommended TrueFoundry deployment template for HTTP/SSE?
+
+  # ================================================================
+  # ACKNOWLEDGEMENTS
+  # ================================================================
   - type: markdown
     attributes:
       value: |
-        ## 10. Logging and Observability
-
-        How tool calls are logged, monitored, and alerted.
-
-  - type: dropdown
-    id: lo_audit_logging
-    attributes:
-      label: "10.1 Full Audit Logging Required? *"
-      description: "Yes = full request/response payloads are logged. No = metadata only (who, what, when). Required for PII, Restricted, and regulated data."
-      options:
-        - "Yes — full payload logging"
-        - "No — metadata only"
-    validations:
-      required: true
-
-  - type: input
-    id: lo_log_retention
-    attributes:
-      label: "10.2 Log Retention Period"
-      placeholder: "e.g., 90 days — SOC 2: 90 days minimum. HIPAA: 6 years. GDPR: duration of processing + 30 days. PCI-DSS: 1 year. Check your compliance team's policy. Common: 30 days (standard), 90 days (SOC 2), 365 days (enhanced), or 'indefinite' for regulated data."
-    validations:
-      required: false
-
-  - type: textarea
-    id: lo_monitoring
-    attributes:
-      label: "10.3 Monitoring & Alerting"
-      description: What metrics are tracked? What triggers alerts? Where are dashboards?
-      placeholder: |
-        EXAMPLE — Replace with your monitoring setup:
-
-        Metrics tracked (via OpenTelemetry → Datadog):
-        - Request count, error rate, latency (P50/P95/P99)
-        - Cache hit/miss rate
-        - Database connection pool utilization
-        - Rate limit hits (how often users hit limits)
-
-        Alerts:
-        - P95 latency > 5s for 5 minutes → Slack #mcp-alerts
-        - Error rate > 5% for 2 minutes → PagerDuty (critical)
-        - Cache hit rate < 50% for 10 minutes → Slack
-        - Database connection pool > 80% → Slack
-
-        Dashboard: https://datadog.company.com/dashboard/mcp-postgres
-    validations:
-      required: false
-
-  - type: input
-    id: lo_health_check
-    attributes:
-      label: "10.4 Health Check Endpoint"
-      description: URL the gateway can call to verify the server is healthy
-      placeholder: "e.g., https://mcp-postgres.internal.company.com/health — Should return 200 OK within 5 seconds. The gateway uses this for circuit-breaking and routing. Suggested: return { status: 'ok', version: '1.2.3', db_connected: true, cache_connected: true }."
-    validations:
-      required: false
-
-  - type: input
-    id: lo_incident_contact
-    attributes:
-      label: "10.5 Incident Response Contact"
-      description: Who gets paged if this server is down or unhealthy?
-      placeholder: "e.g., PagerDuty: data-platform-escalation or Slack: #mcp-alerts — This should be a group/pager, not an individual. Options: PagerDuty schedule, OpsGenie team, Slack channel, or email alias. Used by TrueFoundry monitoring to route alerts."
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 11 — ENVIRONMENTS AND TESTING
-  # ═══════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ## 11. Environments and Testing
-
-        Where the server is deployed and how it is tested before production use.
-
-  - type: dropdown
-    id: et_environment
-    attributes:
-      label: "11.1 Deployment Environment *"
-      description: "SaaS = TrueFoundry-hosted cloud. VPC = in your cloud VPC. On-Prem = your data center. Air-Gapped = no internet access. Multi-Cloud = spans multiple clouds via federated architecture."
-      options:
-        - "SaaS (TrueFoundry Cloud)"
-        - "VPC"
-        - "On-Premise"
-        - "Air-Gapped"
-        - "Multi-Cloud"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: et_cloud_provider
-    attributes:
-      label: "11.2 Cloud Provider(s) *"
-      options:
-        - "AWS"
-        - "Azure"
-        - "GCP"
-        - "OCI"
-        - "On-Prem"
-        - "Hybrid"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: et_network_boundary
-    attributes:
-      label: "11.3 Network Boundary *"
-      description: "How the gateway reaches this server. Same VPC is simplest. Cross-region or internet may need security review."
-      options:
-        - "Same VPC as Gateway"
-        - "Same region, different VPC (VPC peering)"
-        - "Cross-region (Transit Gateway)"
-        - "Internet-accessible (public endpoint + TLS)"
-        - "On-prem / Data center (VPN or Direct Connect)"
-    validations:
-      required: true
-
-  - type: input
-    id: et_proxy_url
-    attributes:
-      label: "11.4 Proxy URL (Federated MCP Gateway)"
-      description: "If using TrueFoundry Federated Gateway, the gateway plane URL that can reach this server."
-      placeholder: "e.g., https://aws-gw-us-east-1.company.com — Only for federated architecture (gateway planes in multiple environments). The central control plane routes through this proxy. Leave blank if all components are in a single gateway plane."
-    validations:
-      required: false
-
-  - type: dropdown
-    id: et_private_network
-    attributes:
-      label: "11.5 Requires Private Network Connectivity?"
-      description: "PrivateLink, VPN, Direct Connect, or Transit Gateway needed?"
-      options:
-        - "Yes — AWS PrivateLink / Azure Private Link"
-        - "Yes — VPN Tunnel"
-        - "Yes — Direct Connect / ExpressRoute"
-        - "No — reachable via standard network routing"
-    validations:
-      required: true
-
-  - type: textarea
-    id: et_staging
-    attributes:
-      label: "11.6 Staging / Test Environment"
-      description: Is there a non-production endpoint available for testing before going live?
-      placeholder: "e.g., Staging URL: https://mcp-postgres-staging.internal.company.com/mcp — This is deployed in the staging VPC with a sanitized copy of the production database (no PII). The MCP Server Team will use this for integration testing before approving the production endpoint. Authentication: same mechanism as production (API key)."
-    validations:
-      required: false
-
-  - type: textarea
-    id: et_testing_strategy
-    attributes:
-      label: "11.7 Testing Strategy"
-      description: How is the MCP server tested? Unit tests, integration tests, load tests?
-      placeholder: |
-        EXAMPLE — Replace with your testing strategy:
-
-        - Unit tests: pytest, covers all tool handlers, auth middleware,
-          input validation, error handling. Coverage target: >90%.
-        - Integration tests: test with a real PostgreSQL test database
-          and Redis instance in CI.
-        - MCP Inspector: tested all tools using the MCP Inspector tool
-          against the staging endpoint.
-        - Load tests: k6 script simulating 100 concurrent users,
-          500 req/min. Validated latency stays under P95 3s.
-        - Security tests: OWASP ZAP scan, SQL injection test suite,
-          JWT fuzzing.
-        - CI: All tests run in GitHub Actions on every PR. Merges to
-          main deploy to staging automatically.
-    validations:
-      required: false
-
-  - type: textarea
-    id: et_rollback
-    attributes:
-      label: "11.8 Rollback Plan"
-      description: What is the procedure if the MCP server has issues after onboarding?
-      placeholder: "e.g., Rollback: revert the ECS service to the previous task definition (GitHub Actions rollback button). Database: zero-downtime, read-only replica means no rollback needed. Gateway: the MCP Server Team can disable the server in the TrueFoundry UI immediately, which prevents all tool calls. Full rollback ETA: <15 minutes from decision."
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 12 — OWNERSHIP AND OPERATIONS
-  # ═══════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ## 12. Ownership and Operations
-
-        Who is responsible for this server day-to-day, and what are the operational commitments.
-
-  - type: input
-    id: oo_owner
-    attributes:
-      label: "12.1 Server Owner *"
-      description: The team or individual ultimately responsible for this MCP server
-      placeholder: "e.g., Data Platform Team (data-platform@company.com) — The entity accountable for the server's uptime, security, and compliance. This is who TrueFoundry contacts for any server-level issues or policy violations."
-    validations:
-      required: true
-
-  - type: input
-    id: oo_oncall
-    attributes:
-      label: "12.2 On-Call / Support Rotation"
-      description: Who responds to incidents? Provide schedule, rotation, and contact method.
-      placeholder: "e.g., PagerDuty schedule: 'data-platform-primary' (24/7 rotation, 1-week shifts). Slack: #data-platform-oncall for non-urgent. Escalation: primary → secondary → team lead. Response time: critical <15 min, high <30 min, normal <2 business hours."
-    validations:
-      required: false
-
-  - type: dropdown
-    id: oo_sla_uptime
-    attributes:
-      label: "12.3 SLA — Uptime Target"
-      description: "99.99% = ~4 min/month downtime. 99.9% = ~43 min/month. 99.5% = ~3.6 hrs/month. Best Effort = no guarantee."
-      options:
-        - "99.99%"
-        - "99.9%"
-        - "99.5%"
-        - "99.0%"
-        - "Best Effort"
-    validations:
-      required: false
-
-  - type: dropdown
-    id: oo_sla_support
-    attributes:
-      label: "12.4 SLA — Support Hours"
-      options:
-        - "24/7"
-        - "Business Hours (09:00-17:00 local)"
-        - "Best Effort"
-    validations:
-      required: false
-
-  - type: input
-    id: oo_maintenance
-    attributes:
-      label: "12.5 Maintenance Windows"
-      description: Scheduled downtime for updates, deployments, or scaling events
-      placeholder: "e.g., Every Sunday 02:00-04:00 UTC — Rolling updates only (zero-downtime deploys). During this window the server may have brief increased latency but should remain available. Major version upgrades may need a full maintenance window (communicated 2 weeks in advance)."
-    validations:
-      required: false
-
-  - type: textarea
-    id: oo_escalation
-    attributes:
-      label: "12.6 Escalation Path"
-      description: Step-by-step escalation if the server is down
-      placeholder: |
-        EXAMPLE — Replace with your escalation path:
-
-        Tier 1: @data-platform-oncall (PagerDuty, 24/7, response <15 min)
-          → If no response in 15 min:
-        Tier 2: Data Platform Lead (John Smith, +1-555-0123)
-          → If no response in 30 min:
-        Tier 3: Director of Engineering (Jane Doe, jane@company.com)
-          → If data breach suspected:
-        Security: security@company.com (immediate)
-
-        For gateway-level issues (can't reach server):
-        Contact TrueFoundry Support via the TrueFoundry dashboard.
-    validations:
-      required: false
-
-  - type: input
-    id: oo_runbook
-    attributes:
-      label: "12.7 Runbook URL"
-      description: Link to the operational runbook for this MCP server
-      placeholder: "e.g., https://wiki.company.com/runbooks/mcp-postgres — Should cover: how to restart the server, rollback a deployment, check logs, common failure modes and fixes, database connection troubleshooting, and who to contact for each subsystem."
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 13 — OPEN QUESTIONS
-  # ═══════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ## 13. Open Questions
-
-        Use this section to flag anything that needs discussion or is not yet decided.
-
-  - type: textarea
-    id: oq_questions
-    attributes:
-      label: "13.1 Questions for the MCP Server Team"
-      description: What do you need the review team to help decide or clarify?
-      placeholder: |
-        EXAMPLE — Replace with your questions:
-
-        1. Should we use API Key or OAuth2 for this server? We're unsure
-           which is more appropriate for an internal tool.
-        2. Can the gateway cache responses at the transport level, or
-           should we rely on our application-level Redis cache?
-        3. What is the recommended approach for handling database
-           connection failures — should the server return an error or
-           should the gateway retry?
-        4. Do we need separate staging and production registrations,
-           or can we use the same server entry with a different URL?
-        5. Can the gateway enforce per-user rate limits based on the
-           JWT subject claim?
-    validations:
-      required: false
-
-  - type: textarea
-    id: oq_risks
-    attributes:
-      label: "13.2 Known Risks / Concerns"
-      description: What risks or concerns have been identified but not resolved?
-      placeholder: |
-        EXAMPLE — Replace with your risks:
-
-        1. RISK: The PostgreSQL read replica has ~5 second lag during
-           peak hours. Mitigation: the read replica lag is monitored,
-           and if >10s, the server returns a warning in the response.
-        2. RISK: The server is a single point of failure — only one
-           ECS service. Mitigation: multi-AZ deployment with 2+ replicas
-           is planned for next sprint.
-        3. CONCERN: Some team members are worried about SQL injection
-           via the AI agent. Mitigation: the input validation layer
-           parses all SQL and rejects anything that isn't SELECT.
-        4. RISK: OAuth token expiry for long-running agent sessions.
-           Mitigation: TrueFoundry auto-refreshes tokens; agents should
-           handle 401 responses by re-authenticating.
-    validations:
-      required: false
-
-  - type: textarea
-    id: oq_pending_decisions
-    attributes:
-      label: "13.3 Decisions Pending"
-      description: What decisions are still open and who needs to make them?
-      placeholder: |
-        EXAMPLE — Replace with your pending decisions:
-
-        1. Rate limit values: Awaiting capacity planning results
-           (Owner: Data Platform Team, ETA: 2026-06-01)
-        2. Production gateway environment: SaaS vs VPC decision pending
-           security review (Owner: Security Team, ETA: 2026-05-30)
-        3. Log retention period: Awaiting compliance team guidance
-           (Owner: Compliance, ETA: 2026-05-28)
-        4. mTLS certificate provisioning: Need to generate and
-           distribute client cert (Owner: Platform Engineering)
-    validations:
-      required: false
-
-  # ═══════════════════════════════════════════
-  # SECTION 14 — ADDITIONAL NOTES
-  # ═══════════════════════════════════════════
-  - type: markdown
-    attributes:
-      value: |
-        ## 14. Additional Notes
-
-        Any remaining context, tags, or attachments for the review team.
-
-  - type: input
-    id: an_tags
-    attributes:
-      label: "14.1 Tags / Labels"
-      description: Comma-separated key=value pairs for organizing in the TrueFoundry dashboard
-      placeholder: "e.g., env=prod, owner=data-platform, cost-center=cc-12345, sla-tier=gold, compliance=soc2, language=python, framework=fastmcp, security-reviewed=true — Consistent tagging helps the platform team filter and search hundreds of MCP servers across the organization."
-    validations:
-      required: false
-
-  - type: input
-    id: an_attachments
-    attributes:
-      label: "14.2 Attachments / Links"
-      description: Links to architecture diagrams, design docs, OpenAPI specs, or ADRs
-      placeholder: "e.g., Architecture diagram: https://docs.google.com/drawings/d/abc123, ADR: https://wiki.company.com/adr-042-mcp-postgres, OpenAPI spec: https://github.com/org/mcp-server/blob/main/openapi.yaml, Security review: https://wiki.company.com/security-review/mcp-postgres — Ensure the review team has access permissions to all links."
-    validations:
-      required: false
-
-  - type: textarea
-    id: an_general_notes
-    attributes:
-      label: "14.3 General Notes"
-      description: Any other context or information for the review team
-      placeholder: |
-        EXAMPLE — Replace with your notes:
-
-        - This server is part of our Q2 OKR: "Enable AI-assisted data access for all engineering teams"
-        - We have completed an internal security review (link in 14.2)
-        - We'd like to schedule a 30-minute walkthrough with the MCP Server Team
-        - Expected to go live by June 15th for the Data Science team's quarterly planning
-        - There are 3 other MCP servers being built by other teams that will depend on this one
-        - The team has already tested with MCP Inspector against the staging endpoint
-        - We're happy to present the architecture in the next platform engineering sync
-    validations:
-      required: false
-
-  # ─────────────────────────────────────────────
-  # ATTESTATION
-  # ─────────────────────────────────────────────
-  - type: markdown
-    attributes:
-      value: |
-        ## 15. Attestation
-
-        All checkboxes must be selected for the form to be accepted.
+        ---
+        ## Acknowledgements
 
   - type: checkboxes
-    id: attestation
+    id: acknowledgements
     attributes:
-      label: "15.1 Confirmation and Agreement"
+      label: "Before submitting, please confirm"
       options:
-        - label: "I own this MCP server or have explicit authorization to request onboarding."
+        - label: "LLM gateway access is already approved (or I will not proceed with this MCP form until it is)."
           required: true
-        - label: "All security requirements (auth, TLS, data classification, compliance) have been assessed and documented."
+        - label: "Manager is aware of this request and supports it."
           required: true
-        - label: "The tools listed in Section 6 are accurate and complete. No hidden or undocumented tools exist."
+        - label: "I am authorized to commit my team's cost center to this work."
           required: true
-        - label: "I will keep the server's documentation, configuration, and this form up to date as the server evolves."
-          required: true
-        - label: "I understand that all tool calls through the gateway will be logged, monitored, and auditable."
-          required: true
-        - label: "My team is committed to the SLA, support hours, and incident response commitments in Section 12."
-          required: true
-        - label: "I have reviewed the TrueFoundry MCP Gateway documentation and understand the platform's capabilities and limitations."
+        - label: "I understand Part 2 may be completed during scoping if I don't have all the answers now."
           required: true
